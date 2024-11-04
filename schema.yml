@@ -1,8 +1,8 @@
 openapi: "3.1.0"
 info:
   version: 1.0.0
-  title: Personal CRM - Teammates, Events, Goals, and Achievements
-  description: API schema for managing teammates, events, goals, and achievements in Airtable
+  title: Personal CRM - Teammates, Events, Goals, Achievements, and Milestones
+  description: API schema for managing teammates, events, goals, achievements, and milestones in Airtable
   license:
     name: MIT
 servers:
@@ -446,6 +446,122 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /Milestones:
+    get:
+      summary: List all milestones
+      operationId: listMilestones
+      tags:
+        - Milestones
+      responses:
+        "200":
+          description: A list of milestones
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MilestoneList"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create one or more milestones
+      operationId: createMilestones
+      tags:
+        - Milestones
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                records:
+                  type: array
+                  description: Array of milestone records to create
+                  items:
+                    type: object
+                    properties:
+                      fields:
+                        $ref: "#/components/schemas/Milestone"
+      responses:
+        "201":
+          description: Created milestone(s)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MilestoneList"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /Milestones/{milestoneId}:
+    get:
+      summary: Retrieve a specific milestone
+      operationId: getMilestone
+      tags:
+        - Milestones
+      parameters:
+        - name: milestoneId
+          in: path
+          required: true
+          description: The ID of the milestone to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Milestone details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MilestoneRecord"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      summary: Update a specific milestone
+      operationId: updateMilestone
+      tags:
+        - Milestones
+      parameters:
+        - name: milestoneId
+          in: path
+          required: true
+          description: The ID of the milestone to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fields:
+                  $ref: "#/components/schemas/Milestone"
+                typecast:
+                  type: boolean
+                  description: "Enable automatic data conversion"
+      responses:
+        "200":
+          description: Updated milestone record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MilestoneRecord"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   schemas:
     Teammate:
@@ -469,6 +585,9 @@ components:
           type: array
           items:
             type: string
+        created:
+          type: string
+          format: date-time
 
     TeammateList:
       type: object
@@ -503,6 +622,9 @@ components:
           type: array
           items:
             type: string
+        Created:
+          type: string
+          format: date-time
 
     EventList:
       type: object
@@ -539,6 +661,9 @@ components:
           type: array
           items:
             type: string
+        Created:
+          type: string
+          format: date-time
 
     GoalList:
       type: object
@@ -570,6 +695,16 @@ components:
           type: array
           items:
             type: string
+        Completed on:
+          type: string
+          format: date
+        Created:
+          type: string
+          format: date-time
+        Milestones:
+          type: array
+          items:
+            type: string
 
     AchievementList:
       type: object
@@ -586,6 +721,40 @@ components:
           type: string
         fields:
           $ref: "#/components/schemas/Achievement"
+        createdTime:
+          type: string
+          format: date-time
+
+    Milestone:
+      type: object
+      properties:
+        Name:
+          type: string
+        Notes:
+          type: string
+        Achievements:
+          type: array
+          items:
+            type: string
+        Link:
+          type: string
+          format: url
+
+    MilestoneList:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/MilestoneRecord"
+
+    MilestoneRecord:
+      type: object
+      properties:
+        id:
+          type: string
+        fields:
+          $ref: "#/components/schemas/Milestone"
         createdTime:
           type: string
           format: date-time
