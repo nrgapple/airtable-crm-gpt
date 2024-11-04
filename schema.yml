@@ -56,6 +56,45 @@ paths:
               schema:
                 $ref: "#/components/schemas/TeammateList"
 
+  /Teammates/{teammateId}:
+    patch:
+      summary: Update a specific teammate
+      operationId: updateTeammate
+      tags:
+        - Teammates
+      parameters:
+        - name: teammateId
+          in: path
+          required: true
+          description: The ID of the teammate to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fields:
+                  $ref: "#/components/schemas/Teammate"
+                typecast:
+                  type: boolean
+                  description: "Enable automatic data conversion"
+      responses:
+        "200":
+          description: Updated teammate record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeammateRecord"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /Events:
     get:
       summary: List all events
@@ -135,8 +174,63 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    patch:
+      summary: Update a specific event
+      operationId: updateEvent
+      tags:
+        - Events
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          description: The ID of the event to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fields:
+                  $ref: "#/components/schemas/Event"
+                typecast:
+                  type: boolean
+                  description: "Enable automatic data conversion"
+      responses:
+        "200":
+          description: Updated event record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventRecord"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /Goals:
+    get:
+      summary: List all goals
+      operationId: listGoals
+      tags:
+        - Goals
+      responses:
+        "200":
+          description: A list of goals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GoalList"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     post:
       summary: Create one or more goals
       operationId: createGoals
@@ -164,8 +258,96 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GoalList"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /Goals/{goalId}:
+    get:
+      summary: Retrieve a specific goal
+      operationId: getGoal
+      tags:
+        - Goals
+      parameters:
+        - name: goalId
+          in: path
+          required: true
+          description: The ID of the goal to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Goal details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GoalRecord"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      summary: Update a specific goal
+      operationId: updateGoal
+      tags:
+        - Goals
+      parameters:
+        - name: goalId
+          in: path
+          required: true
+          description: The ID of the goal to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fields:
+                  $ref: "#/components/schemas/Goal"
+                typecast:
+                  type: boolean
+                  description: "Enable automatic data conversion"
+      responses:
+        "200":
+          description: Updated goal record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GoalRecord"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /Achievements:
+    get:
+      summary: List all achievements
+      operationId: listAchievements
+      tags:
+        - Achievements
+      responses:
+        "200":
+          description: A list of achievements
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AchievementList"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     post:
       summary: These are good things that my teammates have done.
       operationId: createAchievements
@@ -193,6 +375,76 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AchievementList"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /Achievements/{achievementId}:
+    get:
+      summary: Retrieve a specific achievement
+      operationId: getAchievement
+      tags:
+        - Achievements
+      parameters:
+        - name: achievementId
+          in: path
+          required: true
+          description: The ID of the achievement to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Achievement details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AchievementRecord"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      summary: Update a specific achievement
+      operationId: updateAchievement
+      tags:
+        - Achievements
+      parameters:
+        - name: achievementId
+          in: path
+          required: true
+          description: The ID of the achievement to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fields:
+                  $ref: "#/components/schemas/Achievement"
+                typecast:
+                  type: boolean
+                  description: "Enable automatic data conversion"
+      responses:
+        "200":
+          description: Updated achievement record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AchievementRecord"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
 components:
   schemas:
@@ -205,9 +457,6 @@ components:
           type: string
         Job Title:
           type: string
-        AddedAt:
-          type: string
-          format: date
         Events:
           type: array
           items:
