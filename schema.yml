@@ -1,0 +1,350 @@
+openapi: "3.1.0"
+info:
+  version: 1.0.0
+  title: Personal CRM - Teammates, Events, Goals, and Achievements
+  description: API schema for managing teammates, events, goals, and achievements in Airtable
+  license:
+    name: MIT
+servers:
+  - url: https://api.airtable.com/v0/applTffQqnZ7Husui
+
+paths:
+  /Teammates:
+    get:
+      summary: List all teammates
+      operationId: listTeammates
+      tags:
+        - Teammates
+      responses:
+        "200":
+          description: A list of teammates
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeammateList"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create one or more teammates
+      operationId: createTeammates
+      tags:
+        - Teammates
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                records:
+                  type: array
+                  description: Array of teammate records to create
+                  items:
+                    type: object
+                    properties:
+                      fields:
+                        $ref: "#/components/schemas/Teammate"
+      responses:
+        "201":
+          description: Created teammate(s)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeammateList"
+
+  /Events:
+    get:
+      summary: List all events
+      operationId: listEvents
+      tags:
+        - Events
+      responses:
+        "200":
+          description: A list of events
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventList"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create one or more events
+      operationId: createEvents
+      tags:
+        - Events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                records:
+                  type: array
+                  description: Array of event records to create
+                  items:
+                    type: object
+                    properties:
+                      fields:
+                        $ref: "#/components/schemas/Event"
+      responses:
+        "201":
+          description: Created event(s)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventList"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /Events/{eventId}:
+    get:
+      summary: Retrieve a specific event
+      operationId: getEvent
+      tags:
+        - Events
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          description: The ID of the event to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Event details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventRecord"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /Goals:
+    post:
+      summary: Create one or more goals
+      operationId: createGoals
+      tags:
+        - Goals
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                records:
+                  type: array
+                  description: Array of goal records to create
+                  items:
+                    type: object
+                    properties:
+                      fields:
+                        $ref: "#/components/schemas/Goal"
+      responses:
+        "201":
+          description: Created goal(s)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GoalList"
+
+  /Achievements:
+    post:
+      summary: These are good things that my teammates have done.
+      operationId: createAchievements
+      tags:
+        - Achievements
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                records:
+                  type: array
+                  description: Array of achievement records to create
+                  items:
+                    type: object
+                    properties:
+                      fields:
+                        $ref: "#/components/schemas/Achievement"
+      responses:
+        "201":
+          description: Created achievement(s)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AchievementList"
+
+components:
+  schemas:
+    Teammate:
+      type: object
+      properties:
+        Name:
+          type: string
+        Notes:
+          type: string
+        Job Title:
+          type: string
+        AddedAt:
+          type: string
+          format: date
+        Events:
+          type: array
+          items:
+            type: string
+        Goals:
+          type: array
+          items:
+            type: string
+        Achievements:
+          type: array
+          items:
+            type: string
+
+    TeammateList:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/TeammateRecord"
+
+    TeammateRecord:
+      type: object
+      properties:
+        id:
+          type: string
+        fields:
+          $ref: "#/components/schemas/Teammate"
+        createdTime:
+          type: string
+          format: date-time
+
+    Event:
+      type: object
+      properties:
+        Name:
+          type: string
+        Notes:
+          type: string
+        Happened On:
+          type: string
+          format: date
+        Teammate:
+          type: array
+          items:
+            type: string
+
+    EventList:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventRecord"
+
+    EventRecord:
+      type: object
+      properties:
+        id:
+          type: string
+        fields:
+          $ref: "#/components/schemas/Event"
+        createdTime:
+          type: string
+          format: date-time
+
+    Goal:
+      type: object
+      properties:
+        Name:
+          type: string
+        Notes:
+          type: string
+        Complete by:
+          type: string
+          format: date
+        Completed:
+          type: boolean
+        Teammate:
+          type: array
+          items:
+            type: string
+
+    GoalList:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/GoalRecord"
+
+    GoalRecord:
+      type: object
+      properties:
+        id:
+          type: string
+        fields:
+          $ref: "#/components/schemas/Goal"
+        createdTime:
+          type: string
+          format: date-time
+
+    Achievement:
+      type: object
+      properties:
+        Name:
+          type: string
+        Notes:
+          type: string
+        Teammate:
+          type: array
+          items:
+            type: string
+
+    AchievementList:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/AchievementRecord"
+
+    AchievementRecord:
+      type: object
+      properties:
+        id:
+          type: string
+        fields:
+          $ref: "#/components/schemas/Achievement"
+        createdTime:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
